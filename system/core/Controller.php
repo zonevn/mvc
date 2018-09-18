@@ -11,28 +11,11 @@ class Controller
 
     public function __construct()
     {
-    }
+        require_once PATH_SYSTEM . '/core/loader/ConfigLoader.php';
+        $this->config = new ConfigLoader();
+        $this->config->load('config');
 
-    public function load($controller, $action)
-    {
-        $controller = ucfirst(strtolower($controller)) . 'Controller';
-        $action = strtolower($action) . "Action";
-        if (!file_exists(PATH_APPLICATION . '/controller/' . $controller . '.php')) {
-            die('Controller File Not Found.');
-        }
-
-        require_once PATH_APPLICATION . '/controller/' . $controller . '.php';
-
-        if (!class_exists($controller)) {
-            die('Controller Class Not Found.');
-        }
-
-        $controllerObject = new $controller();
-
-        if (!method_exists($controllerObject, $action)) {
-            die('Action Not Found');
-        }
-
-        $controllerObject->{$action}();
+        require_once PATH_SYSTEM . '/core/loader/LibraryLoader.php';
+        $this->library = new LibraryLoader();
     }
 }
